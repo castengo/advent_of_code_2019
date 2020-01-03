@@ -9,6 +9,12 @@ defmodule AdventOfCode.Calendar.Day2 do
   @type instruction :: [non_neg_integer]
   @typedoc "Instruction pointer"
   @type pointer :: non_neg_integer
+  @typedoc "First value of resulting intcode program"
+  @type output :: non_neg_integer
+  @typedoc "Value at address 1"
+  @type noun :: non_neg_integer
+  @typedoc "Value at address 2"
+  @type verb :: non_neg_integer
 
   @doc "Gets Intcode program from file"
   @spec get_data(Path.t()) :: intcode_program
@@ -19,9 +25,28 @@ defmodule AdventOfCode.Calendar.Day2 do
     |> Enum.map(&String.to_integer/1)
   end
 
-  @doc "Restore the gravity assist program to the `1202 program alarm` state"
-  @spec restore(intcode_program) :: intcode_program
-  def restore([num0, _num1, _num2 | rest]), do: [num0, 12, 2 | rest]
+  @doc "Restores program by giving it initial noun and verb values"
+  @spec restore(intcode_program, noun, verb) :: intcode_program
+  def restore([num0, _num1, _num2 | rest], noun, verb),
+    do: [num0, noun, verb | rest]
+
+  @spec find(intcode_program, output) :: {noun, verb}
+  def find(intcode_program, output) do
+    combo_result = fn noun, verb ->
+      intcode_program
+      |> restore(noun, verb)
+      |> run_intcode()
+      |> hd()
+    end
+
+    result =
+      for noun <- 0..99,
+          verb <- 0..99,
+          combo_result.(noun, verb) == output,
+          do: {noun, verb}
+
+    hd(result)
+  end
 
   @doc "Runs Intcode program"
   @spec run_intcode(intcode_program) :: intcode_program
@@ -41,7 +66,7 @@ defmodule AdventOfCode.Calendar.Day2 do
       opcode when opcode in [1, 2] ->
         program
         |> Enum.slice(line_range)
-        |> process_line(program)
+        |> process_instruction(program)
         |> run_intcode(pointer + 4)
 
       _ ->
@@ -49,13 +74,13 @@ defmodule AdventOfCode.Calendar.Day2 do
     end
   end
 
-  @spec process_line(instruction, intcode_program) :: intcode_program
-  defp process_line([1, pos1, pos2, pos3], program) do
+  @spec process_instruction(instruction, intcode_program) :: intcode_program
+  defp process_instruction([1, pos1, pos2, pos3], program) do
     result = Enum.at(program, pos1) + Enum.at(program, pos2)
     List.replace_at(program, pos3, result)
   end
 
-  defp process_line([2, pos1, pos2, pos3], program) do
+  defp process_instruction([2, pos1, pos2, pos3], program) do
     result = Enum.at(program, pos1) * Enum.at(program, pos2)
     List.replace_at(program, pos3, result)
   end
