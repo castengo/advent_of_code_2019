@@ -7,9 +7,9 @@ defmodule AdventOfCode.Calendar.Day1 do
   @type module_mass :: non_neg_integer
 
   @doc "Gets list of module masses from file"
-  @spec get_data :: [module_mass]
-  def get_data do
-    "lib/input/day_1.txt"
+  @spec get_data(Path.t()) :: [module_mass]
+  def get_data(file_path) do
+    file_path
     |> File.read!()
     |> String.split("\n", trim: true)
     |> Enum.map(&String.to_integer/1)
