@@ -27,10 +27,12 @@ defmodule AdventOfCode.Calendar.Day2 do
 
   @doc "Restores program by giving it initial noun and verb values"
   @spec restore(intcode_program, noun, verb) :: intcode_program
+  # TODO: needs test
   def restore([num0, _num1, _num2 | rest], noun, verb),
     do: [num0, noun, verb | rest]
 
   @spec find(intcode_program, output) :: {noun, verb}
+  # TODO: needs test
   def find(intcode_program, output) do
     combo_result = fn noun, verb ->
       intcode_program

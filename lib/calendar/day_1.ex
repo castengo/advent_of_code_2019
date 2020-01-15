@@ -15,7 +15,7 @@ defmodule AdventOfCode.Calendar.Day1 do
     |> Enum.map(&String.to_integer/1)
   end
 
-  @doc "Fuel required to launch all modules"
+  @doc "Fuel required to launch all modules (not considering fuel mass)"
   @spec total_fuel_required([module_mass]) :: fuel_mass
   def total_fuel_required(masses) do
     masses
@@ -43,7 +43,7 @@ defmodule AdventOfCode.Calendar.Day1 do
   defp cap_at_zero(total) when total < 0, do: 0
   defp cap_at_zero(total), do: total
 
-  @doc "Fuel required to launch modules taking into account fuel mass"
+  @doc "Fuel required to launch modules considering fuel mass"
   @spec actual_total_fuel_required([module_mass]) :: fuel_mass
   def actual_total_fuel_required(masses) do
     masses
@@ -51,7 +51,7 @@ defmodule AdventOfCode.Calendar.Day1 do
     |> Enum.reduce(0, &+/2)
   end
 
-  @doc "Fuel required to launch given module taking into account fuel mass"
+  @doc "Fuel required to launch given module considering fuel mass"
   @spec actual_fuel_required(module_mass) :: fuel_mass
   def actual_fuel_required(module_mass) do
     module_mass

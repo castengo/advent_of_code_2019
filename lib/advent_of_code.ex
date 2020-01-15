@@ -4,7 +4,8 @@ defmodule AdventOfCode do
   """
   alias AdventOfCode.Calendar.{
     Day1,
-    Day2
+    Day2,
+    Day3
   }
 
   def day1_result do
@@ -27,6 +28,17 @@ defmodule AdventOfCode do
     %{
       part1: data |> Day2.restore(12, 2) |> Day2.run_intcode() |> hd(),
       part2: part2.(19_690_720)
+    }
+  end
+
+  @doc """
+  Part1: What is the Manhattan distance from the central port to the closest intersection? A: 1674
+  """
+  def day3_result do
+    [wire1, wire2] = Day3.get_data("lib/input/day_3.txt")
+
+    %{
+      part1: Day3.find_distance(wire1, wire2)
     }
   end
 end
