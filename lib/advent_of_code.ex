@@ -33,12 +33,14 @@ defmodule AdventOfCode do
 
   @doc """
   Part1: What is the Manhattan distance from the central port to the closest intersection? A: 1674
+  Part2: What is the fewest combined steps the wires must take to reach an intersection? A: 14012
   """
   def day3_result do
     [wire1, wire2] = Day3.get_data("lib/input/day_3.txt")
 
     %{
-      part1: Day3.find_distance(wire1, wire2)
+      part1: Day3.find_distance(wire1, wire2),
+      part2: Day3.find_steps(wire1, wire2)
     }
   end
 end
